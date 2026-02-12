@@ -157,6 +157,7 @@ function save() {
 function switchScreen(target) {
   const app = document.querySelector(".app");
   if (app) {
+    app.classList.toggle("home-screen", target === "home");
     app.classList.toggle("hide-header", target !== "home");
     app.classList.toggle("home-flow-bg", target === "home");
     app.classList.toggle("timer-flow-bg", target === "timer" || target === "archive");
@@ -1170,6 +1171,7 @@ function init() {
   if (active?.id === "screen-home" || active?.id === "screen-timer" || active?.id === "screen-archive") {
     const app = document.querySelector(".app");
     if (app) {
+      app.classList.toggle("home-screen", active.id === "screen-home");
       app.classList.toggle("home-flow-bg", active.id === "screen-home");
       app.classList.toggle("timer-flow-bg", active.id === "screen-timer" || active.id === "screen-archive");
     }

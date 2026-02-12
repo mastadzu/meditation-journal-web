@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#050505" />
   <title>Meditation Journal Web</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=103" />
+  <link rel="stylesheet" href="styles.css?v=104" />
 </head>
 <body>
   <div class="app">
     <header id="about-trigger" class="header about-trigger" role="button" tabindex="0" aria-label="О проекте">
       <h1>Meditation Journal</h1>
       <p>трекер для медитаций</p>
-      <small id="build-version">build v118</small>
+      <small id="build-version">build v119</small>
     </header>
 
     <main>
@@ -33,12 +33,6 @@
           <p id="today-count" class="today-count-primary">Медитаций сегодня: 0</p>
           <div id="today-sessions" class="list"></div>
         </article>
-
-        <div class="tool-inline home-reminder-sticky">
-          <div class="row reminder-cta">
-            <button id="toggle-reminders" class="secondary-accent reminder-fab" aria-label="Напоминания" title="Напоминания">🔔</button>
-          </div>
-        </div>
       </section>
 
       <section id="screen-timer" class="screen">
@@ -101,6 +95,11 @@
         </div>
       </section>
     </main>
+    <div class="home-reminder-sticky">
+      <div class="row reminder-cta">
+        <button id="toggle-reminders" class="secondary-accent reminder-fab" aria-label="Напоминания" title="Напоминания">🔔</button>
+      </div>
+    </div>
 
     <nav class="bottom-nav bottom-nav-3">
       <span id="nav-indicator" class="nav-indicator" aria-hidden="true"></span>
@@ -174,6 +173,6 @@
     </article>
   </section>
 
-  <script src="app.js?v=99"></script>
+  <script src="app.js?v=100"></script>
 </body>
 </html>
