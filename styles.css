@@ -135,7 +135,7 @@ body {
 
 #screen-home {
   padding-top: clamp(22px, 7vh, 92px);
-  padding-bottom: clamp(140px, 18vh, 200px);
+  padding-bottom: clamp(118px, 16vh, 170px);
 }
 
 #screen-timer {
@@ -183,7 +183,7 @@ body {
 @media (max-width: 768px) {
   #screen-home {
     padding-top: max(34px, calc(env(safe-area-inset-top) + 18px));
-    padding-bottom: max(150px, calc(env(safe-area-inset-bottom) + 132px));
+    padding-bottom: max(132px, calc(env(safe-area-inset-bottom) + 110px));
   }
 
   #screen-timer {
@@ -193,7 +193,7 @@ body {
   .home-reminder-sticky {
     right: 14px;
     width: auto;
-    bottom: calc(12px + env(safe-area-inset-bottom));
+    bottom: calc(66px + env(safe-area-inset-bottom));
     padding-top: 0;
   }
 }
@@ -250,7 +250,7 @@ body {
   display: none;
   position: fixed;
   right: 16px;
-  bottom: calc(12px + env(safe-area-inset-bottom));
+  bottom: calc(66px + env(safe-area-inset-bottom));
   z-index: 44;
   width: auto;
   margin: 0 !important;
