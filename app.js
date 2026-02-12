@@ -158,6 +158,7 @@ function switchScreen(target) {
   const app = document.querySelector(".app");
   if (app) {
     app.classList.toggle("hide-header", target !== "home");
+    app.classList.toggle("home-flow-bg", target === "home");
     app.classList.toggle("timer-flow-bg", target === "timer" || target === "archive");
   }
   document.querySelectorAll(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.screen === target));
@@ -1165,9 +1166,12 @@ function init() {
   renderNav();
   applyArchiveMode();
   const active = document.querySelector(".screen.active");
-  if (active?.id === "screen-timer" || active?.id === "screen-archive") {
+  if (active?.id === "screen-home" || active?.id === "screen-timer" || active?.id === "screen-archive") {
     const app = document.querySelector(".app");
-    if (app) app.classList.add("timer-flow-bg");
+    if (app) {
+      app.classList.toggle("home-flow-bg", active.id === "screen-home");
+      app.classList.toggle("timer-flow-bg", active.id === "screen-timer" || active.id === "screen-archive");
+    }
   }
   bindButtonSpring();
   bindTimer();

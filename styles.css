@@ -50,6 +50,39 @@ body {
   mask-image: radial-gradient(200% 130% at 50% 46%, #000 36%, rgba(0, 0, 0, 0.62) 66%, transparent 100%);
 }
 
+.app.home-flow-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 90px 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.54;
+  filter: blur(34px);
+  background:
+    radial-gradient(72% 86% at 12% 16%, rgba(86, 60, 148, 0.44) 0%, rgba(86, 60, 148, 0) 72%),
+    radial-gradient(74% 88% at 88% 18%, rgba(46, 122, 90, 0.4) 0%, rgba(46, 122, 90, 0) 74%),
+    radial-gradient(84% 92% at 50% 88%, rgba(52, 98, 126, 0.28) 0%, rgba(52, 98, 126, 0) 72%);
+  background-size: 185% 170%, 192% 176%, 188% 172%;
+  background-position: 14% -28%, 84% -20%, 50% -34%;
+  animation: timer-screen-flow 34s linear infinite;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 126px,
+    rgba(0, 0, 0, 0.24) 182px,
+    rgba(0, 0, 0, 0.72) 244px,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 126px,
+    rgba(0, 0, 0, 0.24) 182px,
+    rgba(0, 0, 0, 0.72) 244px,
+    #000 100%
+  );
+}
+
 .header h1 {
   margin: 8px 0 4px;
   font-size: 1.6rem;
@@ -108,6 +141,27 @@ body {
 #screen-timer > * {
   position: relative;
   z-index: 1;
+}
+
+#screen-home > * {
+  position: relative;
+  z-index: 1;
+}
+
+.app.home-flow-bg #screen-home .card {
+  background: linear-gradient(180deg, rgba(14, 20, 25, 0.28), rgba(10, 16, 20, 0.22));
+  border-color: rgba(74, 112, 97, 0.46);
+  backdrop-filter: blur(1.2px);
+}
+
+.app.home-flow-bg #screen-home .timer-card {
+  background: #0b0b0b;
+  border-color: #212121;
+  backdrop-filter: none;
+}
+
+.app.home-flow-bg #screen-home .primary-big {
+  backdrop-filter: none;
 }
 
 #screen-timer .secondary-accent {
