@@ -133,6 +133,10 @@ body {
   display: block;
 }
 
+#screen-home {
+  padding-top: clamp(22px, 7vh, 92px);
+}
+
 #screen-timer {
   padding-top: clamp(40px, 10vh, 110px);
   overflow: visible;
@@ -176,6 +180,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  #screen-home {
+    padding-top: max(34px, calc(env(safe-area-inset-top) + 18px));
+  }
+
   #screen-timer {
     padding-top: max(58px, calc(env(safe-area-inset-top) + 40px));
   }
