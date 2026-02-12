@@ -494,6 +494,9 @@ body {
   margin-top: 10px;
   width: 100%;
   accent-color: #c7dfcf;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .quick-steps {
