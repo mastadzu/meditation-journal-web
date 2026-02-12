@@ -192,7 +192,7 @@ body {
 
   .home-reminder-sticky {
     width: calc(100vw - 20px);
-    bottom: calc(52px + env(safe-area-inset-bottom));
+    bottom: calc(40px + env(safe-area-inset-bottom));
     padding-top: 4px;
   }
 }
@@ -249,7 +249,7 @@ body {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: calc(54px + env(safe-area-inset-bottom));
+  bottom: calc(42px + env(safe-area-inset-bottom));
   z-index: 28;
   width: min(868px, calc(100vw - 24px));
   margin: 0 !important;
