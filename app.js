@@ -488,8 +488,9 @@ function bindTimer() {
   }
 
   function setMinutes(minutes) {
-    const raw = Number(minutes || 10);
-    const valid = Math.max(0.5, Math.min(360, Math.round(raw * 2) / 2));
+    const parsed = Number(minutes);
+    const raw = Number.isFinite(parsed) ? parsed : 10;
+    const valid = Math.max(0, Math.min(360, Math.round(raw * 2) / 2));
     state.timer.durationSec = Math.round(valid * 60);
     if (!state.timer.running) state.timer.remainingSec = state.timer.durationSec;
     save();

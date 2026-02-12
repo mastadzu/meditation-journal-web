@@ -13,7 +13,7 @@
     <header id="about-trigger" class="header about-trigger" role="button" tabindex="0" aria-label="О проекте">
       <h1>Meditation Journal</h1>
       <p>трекер для медитаций</p>
-      <small id="build-version">build v108</small>
+      <small id="build-version">build v109</small>
     </header>
 
     <main>
@@ -52,7 +52,7 @@
           <div class="wheel-wrap">
             <label class="duration-label">
               <span class="duration-title">Длительность</span>
-              <span class="duration-meta">(от 30 сек до 6 час)</span>
+              <span class="duration-meta">(максимум 06:00:00 часов)</span>
             </label>
             <div class="row quick-steps">
               <button id="minus-30s" type="button">-30с</button>
@@ -62,7 +62,7 @@
               <button id="plus-5" type="button">+5</button>
               <button id="plus-30s" type="button">+30с</button>
             </div>
-            <input id="duration-range" class="duration-range" type="range" min="0.5" max="360" step="0.5" value="10" />
+            <input id="duration-range" class="duration-range" type="range" min="0" max="360" step="0.5" value="10" />
           </div>
 
           <div class="timer-stepper" aria-label="Точная настройка времени">
@@ -174,6 +174,6 @@
     </article>
   </section>
 
-  <script src="app.js?v=98"></script>
+  <script src="app.js?v=99"></script>
 </body>
 </html>
