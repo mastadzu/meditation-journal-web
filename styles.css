@@ -135,6 +135,7 @@ body {
 
 #screen-home {
   padding-top: clamp(22px, 7vh, 92px);
+  padding-bottom: clamp(172px, 24vh, 252px);
 }
 
 #screen-timer {
@@ -182,10 +183,17 @@ body {
 @media (max-width: 768px) {
   #screen-home {
     padding-top: max(34px, calc(env(safe-area-inset-top) + 18px));
+    padding-bottom: max(184px, calc(env(safe-area-inset-bottom) + 156px));
   }
 
   #screen-timer {
     padding-top: max(58px, calc(env(safe-area-inset-top) + 40px));
+  }
+
+  .home-reminder-sticky {
+    width: calc(100vw - 20px);
+    bottom: calc(68px + env(safe-area-inset-bottom));
+    padding-top: 8px;
   }
 }
 
@@ -238,17 +246,20 @@ body {
 }
 
 .home-reminder-sticky {
-  position: sticky;
-  bottom: 74px;
-  z-index: 20;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(68px + env(safe-area-inset-bottom));
+  z-index: 28;
+  width: min(868px, calc(100vw - 24px));
+  padding: 10px 0 6px;
   background: linear-gradient(
     to top,
-    rgba(5, 5, 5, 0.92) 45%,
-    rgba(5, 5, 5, 0.55) 78%,
-    rgba(5, 5, 5, 0)
+    rgba(5, 5, 5, 0.98) 30%,
+    rgba(5, 5, 5, 0.84) 68%,
+    rgba(5, 5, 5, 0) 100%
   );
+  backdrop-filter: blur(7px);
 }
 
 .timer-card h2 {
