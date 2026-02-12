@@ -253,14 +253,9 @@ body {
   z-index: 28;
   width: min(868px, calc(100vw - 24px));
   margin: 0 !important;
-  padding: 6px 0 4px;
-  background: linear-gradient(
-    to top,
-    rgba(5, 5, 5, 0.98) 30%,
-    rgba(5, 5, 5, 0.84) 68%,
-    rgba(5, 5, 5, 0) 100%
-  );
-  backdrop-filter: blur(7px);
+  padding: 0;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .timer-card h2 {
