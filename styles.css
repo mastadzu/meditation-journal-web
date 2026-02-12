@@ -1104,6 +1104,16 @@ button.ghost {
   width: min(700px, 100%);
 }
 
+.reminder-modal-title {
+  margin: 0;
+  font-size: clamp(0.9rem, 3.9vw, 1.12rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .reminder-list {
   max-height: 34vh;
   overflow: auto;
