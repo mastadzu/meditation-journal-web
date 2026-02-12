@@ -191,9 +191,9 @@ body {
   }
 
   .home-reminder-sticky {
-    right: 12px;
+    right: 8px;
     width: auto;
-    bottom: calc(84px + env(safe-area-inset-bottom));
+    bottom: calc(8px + env(safe-area-inset-bottom));
     padding-top: 0;
   }
 }
@@ -248,9 +248,9 @@ body {
 
 .home-reminder-sticky {
   position: fixed;
-  right: 16px;
-  bottom: calc(86px + env(safe-area-inset-bottom));
-  z-index: 32;
+  right: 10px;
+  bottom: calc(8px + env(safe-area-inset-bottom));
+  z-index: 44;
   width: auto;
   margin: 0 !important;
   padding: 0;
@@ -342,13 +342,13 @@ body {
 }
 
 .reminder-fab {
-  width: 58px;
-  min-width: 58px;
-  height: 58px;
-  min-height: 58px;
+  width: 52px;
+  min-width: 52px;
+  height: 52px;
+  min-height: 52px;
   border-radius: 999px;
   padding: 0;
-  font-size: 1.45rem;
+  font-size: 1.3rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -368,8 +368,8 @@ body {
 }
 
 #screen-home .home-reminder-sticky .secondary-accent {
-  width: 58px !important;
-  min-width: 58px;
+  width: 52px !important;
+  min-width: 52px;
 }
 
 .action-stack {
