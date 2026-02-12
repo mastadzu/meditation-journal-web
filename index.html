@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>Meditation Journal Web</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css?v=90" />
+</head>
+<body>
+  <div class="app">
+    <header id="about-trigger" class="header about-trigger" role="button" tabindex="0" aria-label="О проекте">
+      <h1>Meditation Journal</h1>
+      <p>трекер для медитаций</p>
+      <small id="build-version">build v103</small>
+    </header>
+
+    <main>
+      <section id="screen-home" class="screen active">
+        <div class="grid stats">
+          <article class="card stat"><span>Медитации</span><strong id="stat-meditations">0</strong></article>
+          <article class="card stat"><span>Намерения</span><strong id="stat-intentions">0</strong></article>
+          <article class="card stat"><span>Инсайты</span><strong id="stat-insights">0</strong></article>
+          <article class="card stat"><span>Идеи</span><strong id="stat-ideas">0</strong></article>
+        </div>
+
+        <article class="card center-card">
+          <button id="go-meditation" class="primary-big">Начать медитацию</button>
+        </article>
+
+        <article class="card timer-card">
+          <p id="today-count" class="today-count-primary">Медитаций сегодня: 0</p>
+          <div id="today-sessions" class="list"></div>
+        </article>
+
+        <div class="tool-inline home-reminder-sticky">
+          <div class="row reminder-cta">
+            <button id="toggle-reminders" class="secondary-accent">Напоминать о медитации</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-timer" class="screen">
+        <div class="tool-inline">
+          <button id="toggle-intention" class="sub-btn secondary-accent">1. Записать намерение</button>
+        </div>
+
+        <article class="card timer-card">
+          <h2 id="timer-step-title" class="step-title-soft">2. Установить и запустить таймер</h2>
+
+          <div class="wheel-wrap">
+            <label class="duration-label">
+              <span class="duration-title">Длительность</span>
+              <span class="duration-meta">(от 30 сек до 6 час)</span>
+            </label>
+            <div class="row quick-steps">
+              <button id="minus-30s" type="button">-30с</button>
+              <button id="minus-5" type="button">-5</button>
+              <button id="minus-1" type="button">-1</button>
+              <button id="plus-1" type="button">+1</button>
+              <button id="plus-5" type="button">+5</button>
+              <button id="plus-30s" type="button">+30с</button>
+            </div>
+            <input id="duration-range" class="duration-range" type="range" min="0.5" max="360" step="0.5" value="10" />
+          </div>
+
+          <div class="timer-stepper" aria-label="Точная настройка времени">
+            <div class="timer" id="timer-readout">10:00</div>
+            <div class="timer-step-controls">
+              <button id="wheel-down" class="timer-step-btn" type="button">−</button>
+              <button id="wheel-up" class="timer-step-btn" type="button">+</button>
+            </div>
+          </div>
+          <div class="progress-track" aria-label="Прогресс медитации">
+            <div id="timer-progress" class="progress-fill"></div>
+          </div>
+
+          <div class="row actions">
+            <button id="btn-start">Старт</button>
+            <button id="btn-reset" class="ghost">Сброс</button>
+          </div>
+        </article>
+
+        <div class="tool-inline">
+          <div class="action-stack">
+            <button id="toggle-insight" class="sub-btn secondary-accent">3. Записать инсайты</button>
+            <button id="toggle-idea" class="sub-btn secondary-accent">4. Зафиксировать идеи</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-archive" class="screen">
+        <div id="archive-overview-block" class="archive-block">
+          <h2 class="archive-title">Архив</h2>
+          <div id="archive-list" class="list"></div>
+        </div>
+        <div id="archive-details-block" class="archive-block">
+          <h2 class="archive-title">Детали медитации</h2>
+          <div id="session-details" class="list"></div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav bottom-nav-3">
+      <span id="nav-indicator" class="nav-indicator" aria-hidden="true"></span>
+      <button data-screen="home" class="nav-btn active"><span class="nav-btn-label">Главная</span></button>
+      <button data-screen="timer" class="nav-btn nav-btn-main"><span class="nav-btn-label">Медитация</span></button>
+      <button data-screen="archive" class="nav-btn"><span class="nav-btn-label">Архив</span></button>
+    </nav>
+  </div>
+
+  <section id="note-editor" class="note-editor hidden-block">
+    <article class="note-editor-card">
+      <h2 id="note-editor-title">Моё намерение</h2>
+      <p id="note-editor-hint" class="note-editor-hint"></p>
+      <textarea id="note-editor-input" class="note-editor-input" placeholder=""></textarea>
+      <div class="row note-editor-actions">
+        <button id="note-clear" class="ghost" type="button">Очистить</button>
+        <button id="note-cancel" class="ghost">Отмена</button>
+        <button id="note-save">Сохранить</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="reminder-modal" class="note-editor hidden-block">
+    <article class="note-editor-card reminder-card">
+      <h2>Напоминания</h2>
+      <p class="note-editor-hint">Можно добавить любое количество напоминаний. Все они появятся в списке ниже.</p>
+      <div class="row">
+        <label for="reminder-time">Время</label>
+        <input id="reminder-time" type="time" value="08:00" />
+      </div>
+      <div class="row">
+        <label for="reminder-label">Текст</label>
+        <input id="reminder-label" type="text" placeholder="Напоминаю, что сегодня у тебя медитация в такое-то время!" />
+      </div>
+      <small id="notify-state"></small>
+      <div id="reminder-list" class="list reminder-list"></div>
+      <div class="row note-editor-actions">
+        <button id="reminder-close" class="ghost">Отмена</button>
+        <button id="add-reminder">Сохранить напоминание</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="about-modal" class="note-editor hidden-block">
+    <article class="note-editor-card about-card">
+      <h2>О проекте</h2>
+      <p class="about-text">
+        Привет! Я — приложение <span class="name-em">Meditation Journal</span>.
+      </p>
+      <p class="about-text">
+        Меня создал художник, музыкальный продюсер, DJ и ювелир <span class="name-em">Ruslan Mazaev</span>, чтобы было удобнее медитировать и фиксировать инсайты и идеи после практики, вдохновленный книгой Дэвида Линча <span class="name-em">«Поймать большую рыбу»</span> о силе медитации и поиски хороших идей для своей жизни и творчества.
+      </p>
+      <p class="about-text">
+        <span class="name-em">Meditation Journal</span> подходит для любого вида медитации, где важно фиксировать время: для статичных практик и для двигательной медитации.
+      </p>
+      <p class="about-text">
+        Это приложение создано для поддержки благого намерения медитировать каждый день, очищать ум от суеты и наполнять сознание ясностью, любовью и силой настоящего момента, напоминая о своей истинной безграничной природе.
+      </p>
+      <p class="about-text">
+        Приложение остается бесплатным, и автор развивает его на своих личных ресурсах. Если захочется поддержать развитие и отблагодарить автора, можно перевести любую сумму на
+        <a href="https://tips.yandex.ru/guest/payment/3307259" target="_blank" rel="noopener noreferrer"><span class="name-em">Yandex Чаевые</span></a>.
+      </p>
+      <p class="about-text">
+        Если захочется ознакомиться с творчеством Руслана — подписывайся на Telegram-канал
+        <a href="https://t.me/djruslanmazaev" target="_blank" rel="noopener noreferrer"><span class="name-em">DJ Ruslan Mazaev за Пультом!</span></a>
+      </p>
+      <p class="about-text">Глубокой и плодотворной практики!</p>
+      <div class="row note-editor-actions">
+        <button id="about-close" class="ghost icon-close-btn" aria-label="Закрыть">🙏</button>
+      </div>
+    </article>
+  </section>
+
+  <script src="app.js?v=97"></script>
+</body>
+</html>
