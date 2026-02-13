@@ -799,23 +799,24 @@ button.ghost {
 .timer-stepper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 0;
   margin: 8px 0 12px;
-  padding-right: 6px;
+  padding-right: 0;
 }
 
-.timer-step-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: 4px;
-  flex-shrink: 0;
+.timer-readout-btn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  text-align: left;
 }
 
 .timer-stepper .timer {
-  flex: 1 1 68%;
-  min-width: 68%;
+  flex: 1 1 100%;
+  min-width: 100%;
   text-align: left;
   padding-left: 0.08em;
 }
@@ -828,6 +829,14 @@ button.ghost {
   background: #0a0a0a;
   padding: 0;
   border-radius: 999px;
+}
+
+.timer-input-row {
+  align-items: center;
+}
+
+.timer-input-row label {
+  min-width: 92px;
 }
 
 .progress-track {

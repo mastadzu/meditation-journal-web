@@ -10,7 +10,9 @@ const state = {
     remainingSec: 600,
     running: false,
     startedAt: 0,
+    endsAt: 0,
     intervalId: null,
+    wakeLock: null,
   },
   reminderHits: {},
   currentSessionId: null,
@@ -129,7 +131,7 @@ function load() {
     state.entries = (parsed.entries || []).map((e) => ({ ...e, sessionId: e.sessionId ?? null }));
     state.reminders = parsed.reminders || [];
     state.reminderHits = parsed.reminderHits || {};
-    if (typeof parsed.timerDurationSec === "number" && parsed.timerDurationSec > 0) {
+    if (typeof parsed.timerDurationSec === "number" && parsed.timerDurationSec >= 0) {
       state.timer.durationSec = parsed.timerDurationSec;
       state.timer.remainingSec = parsed.timerDurationSec;
     }
@@ -463,55 +465,89 @@ function renderTodaySessions() {
 }
 
 function bindTimer() {
-  const upBtn = document.getElementById("wheel-up");
-  const downBtn = document.getElementById("wheel-down");
-  const range = document.getElementById("duration-range");
-  const minus1 = document.getElementById("minus-1");
-  const plus1 = document.getElementById("plus-1");
-  const minus5 = document.getElementById("minus-5");
-  const plus5 = document.getElementById("plus-5");
-  const minus30 = document.getElementById("minus-30s");
-  const plus30 = document.getElementById("plus-30s");
+  const MAX_SECONDS = 6 * 60 * 60;
+  const readoutBtn = document.getElementById("timer-readout-btn");
   const readout = document.getElementById("timer-readout");
   const progress = document.getElementById("timer-progress");
+  const modal = document.getElementById("timer-input-modal");
+  const inputHours = document.getElementById("timer-hours");
+  const inputMinutes = document.getElementById("timer-minutes");
+  const inputSeconds = document.getElementById("timer-seconds");
+  const cancelBtn = document.getElementById("timer-input-cancel");
+  const saveBtn = document.getElementById("timer-input-save");
 
-  function formatMinutesValue(mins) {
-    if (Number.isInteger(mins)) return String(mins);
-    return mins.toFixed(1).replace(/\.0$/, "");
+  async function requestWakeLock() {
+    if (!("wakeLock" in navigator) || !state.timer.running) return;
+    try {
+      if (!state.timer.wakeLock) state.timer.wakeLock = await navigator.wakeLock.request("screen");
+    } catch {
+      // ignore unsupported or denied
+    }
+  }
+
+  async function releaseWakeLock() {
+    try {
+      if (state.timer.wakeLock) await state.timer.wakeLock.release();
+    } catch {
+      // ignore
+    }
+    state.timer.wakeLock = null;
   }
 
   function paintTimer() {
-    const mins = state.timer.durationSec / 60;
-    const done = Math.max(0, Math.min(1, 1 - state.timer.remainingSec / Math.max(1, state.timer.durationSec)));
-    renderTimerReadout(readout, formatDuration(state.timer.remainingSec));
-    range.value = formatMinutesValue(mins);
+    const done = state.timer.durationSec <= 0
+      ? 0
+      : Math.max(0, Math.min(1, 1 - state.timer.remainingSec / state.timer.durationSec));
+    renderTimerReadout(readout, formatDuration(Math.max(0, state.timer.remainingSec)));
     progress.style.width = `${Math.round(done * 100)}%`;
   }
 
-  function setMinutes(minutes) {
-    const parsed = Number(minutes);
-    const raw = Number.isFinite(parsed) ? parsed : 10;
-    const valid = Math.max(0, Math.min(360, Math.round(raw * 2) / 2));
-    state.timer.durationSec = Math.round(valid * 60);
-    if (!state.timer.running) state.timer.remainingSec = state.timer.durationSec;
+  function setDurationSec(seconds) {
+    const safe = Math.max(0, Math.min(MAX_SECONDS, Math.floor(Number(seconds) || 0)));
+    state.timer.durationSec = safe;
+    if (!state.timer.running) state.timer.remainingSec = safe;
     save();
     paintTimer();
   }
 
-  function stepMinutes(delta) {
-    const current = state.timer.durationSec / 60;
-    setMinutes(current + delta);
+  function fillTimerInputsFromState() {
+    const total = Math.max(0, state.timer.durationSec);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    inputHours.value = String(h);
+    inputMinutes.value = String(m);
+    inputSeconds.value = String(s);
   }
 
-  upBtn.onclick = () => stepMinutes(0.5);
-  downBtn.onclick = () => stepMinutes(-0.5);
-  minus1.onclick = () => stepMinutes(-1);
-  plus1.onclick = () => stepMinutes(1);
-  minus5.onclick = () => stepMinutes(-5);
-  plus5.onclick = () => stepMinutes(5);
-  minus30.onclick = () => stepMinutes(-0.5);
-  plus30.onclick = () => stepMinutes(0.5);
-  range.oninput = () => setMinutes(Number(range.value));
+  function openTimerModal() {
+    if (state.timer.running) return;
+    fillTimerInputsFromState();
+    modal.classList.remove("hidden-block");
+    inputMinutes.focus();
+    inputMinutes.select();
+  }
+
+  function closeTimerModal() {
+    modal.classList.add("hidden-block");
+  }
+
+  function saveTimerFromInputs() {
+    const h = Math.max(0, Math.min(6, Number.parseInt(inputHours.value || "0", 10) || 0));
+    const m = Math.max(0, Math.min(59, Number.parseInt(inputMinutes.value || "0", 10) || 0));
+    const s = Math.max(0, Math.min(59, Number.parseInt(inputSeconds.value || "0", 10) || 0));
+    const total = Math.min(MAX_SECONDS, h * 3600 + m * 60 + s);
+    setDurationSec(total);
+    closeTimerModal();
+  }
+
+  function syncTimerWithNow() {
+    if (!state.timer.running) return;
+    const left = Math.max(0, Math.ceil((state.timer.endsAt - nowMs()) / 1000));
+    state.timer.remainingSec = left;
+    paintTimer();
+    if (left <= 0) finishMeditation();
+  }
 
   document.getElementById("btn-start").onclick = () => {
     if (state.timer.running) return;
@@ -548,26 +584,58 @@ function bindTimer() {
 
     state.timer.running = true;
     state.timer.startedAt = startedAt;
-    state.timer.intervalId = setInterval(() => {
-      state.timer.remainingSec -= 1;
-      paintTimer();
-      if (state.timer.remainingSec <= 0) finishMeditation();
-    }, 1000);
+    state.timer.endsAt = startedAt + state.timer.durationSec * 1000;
+    state.timer.intervalId = setInterval(syncTimerWithNow, 250);
+    requestWakeLock();
+    syncTimerWithNow();
   };
 
   document.getElementById("btn-reset").onclick = () => {
     clearInterval(state.timer.intervalId);
     state.timer.running = false;
+    state.timer.startedAt = 0;
+    state.timer.endsAt = 0;
     state.timer.remainingSec = state.timer.durationSec;
+    releaseWakeLock();
     paintTimer();
   };
+
+  readoutBtn.onclick = openTimerModal;
+  cancelBtn.onclick = closeTimerModal;
+  saveBtn.onclick = saveTimerFromInputs;
+  modal.onclick = (e) => {
+    if (e.target === modal) closeTimerModal();
+  };
+
+  [inputHours, inputMinutes, inputSeconds].forEach((el) => {
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        saveTimerFromInputs();
+      }
+    });
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (!state.timer.running) return;
+    if (document.visibilityState === "visible") requestWakeLock();
+    syncTimerWithNow();
+  });
+  window.addEventListener("focus", syncTimerWithNow);
 
   paintTimer();
 }
 
 function finishMeditation() {
+  if (!state.timer.running) return;
   clearInterval(state.timer.intervalId);
   state.timer.running = false;
+  state.timer.startedAt = 0;
+  state.timer.endsAt = 0;
+  if (state.timer.wakeLock) {
+    state.timer.wakeLock.release().catch(() => {});
+    state.timer.wakeLock = null;
+  }
   state.timer.remainingSec = 0;
   playSoftBell();
   state.timer.remainingSec = state.timer.durationSec;

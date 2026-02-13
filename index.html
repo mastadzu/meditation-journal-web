@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#050505" />
   <title>Meditation Journal Web</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=105" />
+  <link rel="stylesheet" href="styles.css?v=106" />
 </head>
 <body>
   <div class="app">
     <header id="about-trigger" class="header about-trigger" role="button" tabindex="0" aria-label="О проекте">
       <h1>Meditation Journal</h1>
       <p>трекер для медитаций</p>
-      <small id="build-version">build v120</small>
+      <small id="build-version">build v121</small>
     </header>
 
     <main>
@@ -48,23 +48,12 @@
               <span class="duration-title">Длительность</span>
               <span class="duration-meta">(максимум 06:00:00 часов)</span>
             </label>
-            <div class="row quick-steps">
-              <button id="minus-30s" type="button">-30с</button>
-              <button id="minus-5" type="button">-5</button>
-              <button id="minus-1" type="button">-1</button>
-              <button id="plus-1" type="button">+1</button>
-              <button id="plus-5" type="button">+5</button>
-              <button id="plus-30s" type="button">+30с</button>
-            </div>
-            <input id="duration-range" class="duration-range" type="range" min="0" max="360" step="0.5" value="10" />
           </div>
 
           <div class="timer-stepper" aria-label="Точная настройка времени">
-            <div class="timer" id="timer-readout">10:00</div>
-            <div class="timer-step-controls">
-              <button id="wheel-down" class="timer-step-btn" type="button">−</button>
-              <button id="wheel-up" class="timer-step-btn" type="button">+</button>
-            </div>
+            <button id="timer-readout-btn" class="timer-readout-btn" type="button" aria-label="Установить время таймера">
+              <div class="timer" id="timer-readout">10:00</div>
+            </button>
           </div>
           <div class="progress-track" aria-label="Прогресс медитации">
             <div id="timer-progress" class="progress-fill"></div>
@@ -143,6 +132,29 @@
     </article>
   </section>
 
+  <section id="timer-input-modal" class="note-editor hidden-block">
+    <article class="note-editor-card reminder-card">
+      <h2 class="reminder-modal-title">Установить время медитации</h2>
+      <p class="note-editor-hint">Введите часы, минуты и секунды.</p>
+      <div class="row timer-input-row">
+        <label for="timer-hours">Часы</label>
+        <input id="timer-hours" type="number" inputmode="numeric" min="0" max="6" step="1" value="0" />
+      </div>
+      <div class="row timer-input-row">
+        <label for="timer-minutes">Минуты</label>
+        <input id="timer-minutes" type="number" inputmode="numeric" min="0" max="59" step="1" value="10" />
+      </div>
+      <div class="row timer-input-row">
+        <label for="timer-seconds">Секунды</label>
+        <input id="timer-seconds" type="number" inputmode="numeric" min="0" max="59" step="1" value="0" />
+      </div>
+      <div class="row note-editor-actions">
+        <button id="timer-input-cancel" class="ghost">Отмена</button>
+        <button id="timer-input-save">Ок</button>
+      </div>
+    </article>
+  </section>
+
   <section id="about-modal" class="note-editor hidden-block">
     <article class="note-editor-card about-card">
       <h2>О проекте</h2>
@@ -173,6 +185,6 @@
     </article>
   </section>
 
-  <script src="app.js?v=100"></script>
+  <script src="app.js?v=101"></script>
 </body>
 </html>
